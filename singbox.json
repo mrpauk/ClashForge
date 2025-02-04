@@ -1,32 +1,48 @@
-
 {
   "log": {
     "disabled": false,
     "level": "info",
     "timestamp": true
   },
-  "dns": {
-    "servers": [
-      {
-        "tag": "dns_proxy",
-        "address": "tls://1.1.1.1",
-        "address_resolver": "dns_resolver"
-      },
-      {
-        "tag": "dns_direct",
-        "address": "h3://dns.alidns.com/dns-query",
-        "address_resolver": "dns_resolver",
-        "detour": "DIRECT"
-      },
-      {
-        "tag": "dns_fakeip",
-        "address": "fakeip"
-      },
-      {
-        "tag": "dns_resolver",
-        "address": "223.5.5.5",
-        "detour": "DIRECT"
-      },
+
+Your current Sing-box DNS settings might be causing internet issues in Myanmar because:
+
+tls://1.1.1.1 Might Be Blocked – TLS-based DNS to Cloudflare (1.1.1.1) may not work if blocked.
+h3://dns.alidns.com/dns-query Might Be Unstable – HTTP/3-based DoH can have connectivity issues in some networks.
+223.5.5.5 (AliDNS) Might Be Inaccessible – If blocked, it could cause failures in resolving domains.
+Recommended Fix: Adjust DNS Settings
+Try this modified version:
+
+json
+Copy
+Edit
+"dns": {
+  "servers": [
+    {
+      "tag": "dns_proxy",
+      "address": "https://1.1.1.1/dns-query",
+      "detour": "proxy"
+    },
+    {
+      "tag": "dns_direct",
+      "address": "https://dns.quad9.net/dns-query",
+      "detour": "DIRECT"
+    },
+    {
+      "tag": "dns_backup",
+      "address": "udp://9.9.9.9",
+      "detour": "DIRECT"
+    },
+    {
+      "tag": "dns_fakeip",
+      "address": "fakeip"
+    },
+    {
+      "tag": "block",
+      "address": "rcode://success"
+    }
+  ]
+},
       {
         "tag": "block",
         "address": "rcode://success"
