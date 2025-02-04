@@ -31,11 +31,6 @@
     }
   ]
 },
-      {
-        "tag": "block",
-        "address": "rcode://success"
-      }
-    ],
     "rules": [
       {
         "outbound": [
