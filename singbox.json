@@ -5,60 +5,48 @@
     "timestamp": true
   },
   "dns": {
-  "servers": [
-    {
-      "tag": "dns_proxy",
-      "address": "https://1.1.1.1/dns-query",
-      "detour": "proxy"
-    },
-    {
-      "tag": "dns_direct",
-      "address": "https://dns.quad9.net/dns-query",
-      "detour": "DIRECT"
-    },
-    {
-      "tag": "dns_backup",
-      "address": "udp://9.9.9.9",
-      "detour": "DIRECT"
-    },
-    {
-      "tag": "dns_fakeip",
-      "address": "fakeip"
-    },
-    {
-      "tag": "block",
-      "address": "rcode://success"
-    }
-  ]
-},
-    "rules": [
+    "servers": [
       {
-        "outbound": [
-          "any"
-        ],
-        "server": "dns_resolver"
+        "tag": "dns_proxy",
+        "address": "https://1.1.1.1/dns-query",
+        "detour": "proxy"
       },
       {
-        "geosite": [
-          "category-ads-all"
-        ],
+        "tag": "dns_direct",
+        "address": "https://dns.quad9.net/dns-query",
+        "detour": "DIRECT"
+      },
+      {
+        "tag": "dns_backup",
+        "address": "udp://9.9.9.9",
+        "detour": "DIRECT"
+      },
+      {
+        "tag": "dns_fakeip",
+        "address": "fakeip"
+      },
+      {
+        "tag": "dns_block",
+        "address": "rcode://success"
+      }
+    ],
+    "rules": [
+      {
+        "outbound": "any",
+        "server": "dns_direct"
+      },
+      {
+        "geosite": ["category-ads-all"],
         "server": "dns_block",
         "disable_cache": true
       },
       {
-        "geosite": [
-          "geolocation-!cn"
-        ],
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
+        "geosite": ["geolocation-!cn"],
+        "query_type": ["A", "AAAA"],
         "server": "dns_fakeip"
       },
       {
-        "geosite": [
-          "geolocation-!cn"
-        ],
+        "geosite": ["geolocation-!cn"],
         "server": "dns_proxy"
       }
     ],
@@ -85,6 +73,8 @@
       "stack": "mixed",
       "sniff": true
     }
+  ]
+}
   ],
   "outbounds": [
     {
